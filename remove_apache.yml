@@ -1,0 +1,15 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install apache2 (httpd)  package
+    yum:
+      name: httpd
+      state: absent 
+
+  - name: add phph support for apache
+    yum:
+      name: php
+      state: absent
