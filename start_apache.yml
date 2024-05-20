@@ -8,3 +8,4 @@
     service:
       name: httpd     
       state: started
+    when: ansible_distribution == "REDOS"

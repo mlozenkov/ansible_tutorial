@@ -4,12 +4,14 @@
   become: true
   tasks:
 
-  - name: install apache2 (httpd)  package
+  - name: install apache2  package
+    apt:
+      name: apache2
+      state: latest 
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - name: install httpd package
     yum:
       name: httpd
-      state: latest 
-
-  - name: add phph support for apache
-    yum:
-      name: php
       state: latest
+    when: ansible_distribution == "REDOS"
