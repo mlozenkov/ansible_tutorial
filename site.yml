@@ -1,0 +1,61 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install updates (REDOS)
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "REDOS"
+
+  - name: install updates (Ubuntu)
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php for Ubuntu servers
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+  - name: install httpd and php for REDOS servers
+    dnf:
+      name:
+        - httpd
+        - php
+    when: ansible_distribution == "REDOS"
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb for REDOS servers
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "REDOS"
+
+  - name: install mariadb for Ubuntu servers
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: file_servers
+  become: true
+  tasks:
+
+  - name: install samba
+    package:
+      name: samba
+      state: latest
+ 

@@ -4,12 +4,27 @@
   become: true
   tasks:
 
-  - name: install apache2 (httpd)  package
+  - name: remove  apache2 (httpd)  package REDOS
     yum:
       name: httpd
-      state: absent 
+      state: absent
+    when: ansible_distribution == "REDOS"
 
-  - name: add phph support for apache
+  - name: remove phph support for apache REDOS
     yum:
       name: php
       state: absent
+    when: ansible_distribution == "REDOS"
+
+  - name: remove apache2 (httpd)  package Ubuntu
+    apt:
+      name: apache2
+      state: absent
+    when: ansible_distribution == "Ubuntu"
+
+  - name: remove php support for apache Ubuntu
+    apt:
+      name: libapache2-mod-php
+      state: absent
+    when: ansible_distribution == "Ubuntu"
+
