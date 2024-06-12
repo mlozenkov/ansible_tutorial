@@ -5,22 +5,25 @@
   tasks:
 
   - name: install updates (REDOS)
+    tags: always
     dnf:
       update_only: yes
       update_cache: yes
     when: ansible_distribution == "REDOS"
 
-  - name: install updates (Ubuntu)
-    apt:
-      upgrade: dist
-      update_cache: yes
-    when: ansible_distribution == "Ubuntu"
+#  - name: install updates (Ubuntu)
+#    tags: always
+#    apt:
+#      upgrade: dist
+#      update_cache: yes
+#    when: ansible_distribution == "Ubuntu"
 
 - hosts: web_servers
   become: true
   tasks:
 
   - name: install apache2 and php for Ubuntu servers
+    tags: apache,apache2,ubuntu
     apt:
       name:
         - apache2
@@ -28,6 +31,7 @@
     when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: install httpd and php for REDOS servers
+    tags: apache,REDOS,httpd
     dnf:
       name:
         - httpd
@@ -39,12 +43,14 @@
   tasks:
 
   - name: install mariadb for REDOS servers
+    tags: REDOS,mariadb
     dnf:
       name: mariadb
       state: latest
     when: ansible_distribution == "REDOS"
 
   - name: install mariadb for Ubuntu servers
+    tags: db,mariadb,ubuntu
     apt:
       name: mariadb-server
       state: latest
@@ -55,6 +61,7 @@
   tasks:
 
   - name: install samba
+    tags: samba
     package:
       name: samba
       state: latest
