@@ -11,24 +11,12 @@
       update_cache: yes
     when: ansible_distribution == "Fedora"
 
-#  - name: install updates (Ubuntu)
-#    tags: always
-#    apt:
-#      upgrade: dist
-#      update_cache: yes
-#    when: ansible_distribution == "Ubuntu"
-
-
 - hosts: workstations
-  tags: workstations
   become: true
   tasks:
 
-#  - name: install unzip
-#    package:
-#      name: unzip
-
   - name: install terraform
+    tags: workstations
     get_url: 
       url: https://github.com/mlozenkov/ansible_tutorial/blob/main/afiles.zip
       dest: /home/mike/afiles.zip
