@@ -30,12 +30,12 @@
 
   - name: install terraform
     ansible.builtin.unarchive: 
-      src: https://github.com/mlozenkov/ansible_tutorial/blob/main/3.tar
-      dest: /home/mike/
+      src: https://github.com/mlozenkov/ansible_tutorial/blob/main/3.tar.gz
+      dest: /home/mike
       remote_src: yes
       mode: 0755
-      owner: root
-      group: root
+      owner: mike
+      group: mike
 
 - hosts: web_servers
   become: true
