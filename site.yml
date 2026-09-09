@@ -19,6 +19,24 @@
 #    when: ansible_distribution == "Ubuntu"
 
 
+- hosts: workstations
+  tags: workstations
+  become: true
+  tasks:
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    ansible.builtin.unarchive: 
+      src: https://github.com/mlozenkov/ansible_tutorial/blob/main/3.tar
+      dest: /home/mike/
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
+
 - hosts: web_servers
   become: true
   tasks:
