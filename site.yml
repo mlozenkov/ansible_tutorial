@@ -24,15 +24,14 @@
   become: true
   tasks:
 
-  - name: install unzip
-    package:
-      name: unzip
+#  - name: install unzip
+#    package:
+#      name: unzip
 
   - name: install terraform
-    ansible.builtin.unarchive: 
-      src: https://github.com/mlozenkov/ansible_tutorial/blob/main/3.tar.gz
-      dest: /home/mike
-      remote_src: yes
+    get_url: 
+      url: https://github.com/mlozenkov/ansible_tutorial/blob/main/afiles.zip
+      dest: /home/mike/afiles.zip
       mode: 0755
       owner: mike
       group: mike
