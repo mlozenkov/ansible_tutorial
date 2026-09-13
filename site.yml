@@ -1,35 +1,35 @@
 ---
 
-- hosts: all
-  become: true
-  tasks:
-
-  - name: install updates (Fedora)
-    tags: always
-    dnf:
-      update_only: yes
-      update_cache: yes
-    when: ansible_distribution == "Fedora"
-
-  - name: install updates (Ubuntu)
-    tags: always
-    apt:
-      upgrade: dist
-      update_cache: yes
-    when: ansible_distribution == "Ubuntu"
-
-- hosts: workstations
-  become: true
-  tasks:
-
-  - name: install terraform
-    tags: workstations
-    get_url: 
-      url: https://github.com/mlozenkov/ansible_tutorial/blob/main/afiles.zip
-      dest: /home/mike/afiles.zip
-      mode: 0755
-      owner: mike
-      group: mike
+#- hosts: all
+#  become: true
+#  tasks:
+#
+#  - name: install updates (Fedora)
+#    tags: always
+#    dnf:
+#      update_only: yes
+#      update_cache: yes
+#    when: ansible_distribution == "Fedora"
+#
+#  - name: install updates (Ubuntu)
+#    tags: always
+#    apt:
+#      upgrade: dist
+#      update_cache: yes
+#    when: ansible_distribution == "Ubuntu"
+#
+#- hosts: workstations
+#  become: true
+#  tasks:
+#
+#  - name: install terraform
+#    tags: workstations
+#    get_url: 
+#      url: https://github.com/mlozenkov/ansible_tutorial/blob/main/afiles.zip
+#      dest: /home/mike/afiles.zip
+#      mode: 0755
+#      owner: mike
+#      group: mike
 
 - hosts: web_servers
   become: true
@@ -53,6 +53,30 @@
       state: latest
     when: ansible_distribution == "Fedora"
 
+  - name: start httpd (Fedora)
+    tags: apache,fedora,httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "Fedora"
+
+  - name: change e-mail address for admin
+    tags: apache,fedora,httpd
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin somebody@somewhere.net
+    when: ansible_distribution == "Fedora"
+    register: pizza
+
+  - name: restart httpd (Fedora)
+    tags: apache,fedora,httpd
+    service:
+      name: httpd
+      state: restarted
+    when: pizza.changed
+
   - name: copy default html file for site
     tags: apache,apache2,httpd
     copy:
@@ -61,7 +85,6 @@
       owner: root
       group: root
       mode: 0644
-
 
 - hosts: db_servers
   become: true
