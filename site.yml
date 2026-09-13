@@ -11,6 +11,13 @@
       update_cache: yes
     when: ansible_distribution == "Fedora"
 
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
 - hosts: workstations
   become: true
   tasks:
